@@ -207,9 +207,8 @@
 
                     <div class="flex items-center justify-between mb-6 pb-6 border-b border-gray-200">
                         <span class="text-sm text-gray-600">Status</span>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold" 
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800"
                             th:classappend="${vehicle.status == 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}"
-                            class="bg-green-100 text-green-800"
                             th:text="${vehicle.status}">In Service</span>
                     </div>
 
