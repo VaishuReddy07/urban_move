@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Notifications - Urban Move</title>
+</head>
+<div layout:fragment="content">
+        <div class="container mx-auto px-4 py-8">
+            <!-- Page Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Notifications</h1>
+                    <p class="text-gray-600 mt-2">Manage your system notifications</p>
+                </div>
+                <form th:action="@{/notifications/mark-all-read}" method="post" class="inline">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">
+                        <i class="fas fa-check-double mr-2"></i>Mark All as Read
+                    </button>
+                </form>
+            </div>
+
+            <!-- Notification Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <p class="text-sm text-gray-600">Total Notifications</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2" th:text="${totalNotifications}">0</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <p class="text-sm text-gray-600">Unread</p>
+                    <p class="text-3xl font-bold text-red-600 mt-2" th:text="${unreadCount}">0</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <p class="text-sm text-gray-600">Read</p>
+                    <p class="text-3xl font-bold text-green-600 mt-2" th:text="${totalNotifications - unreadCount}">0</p>
+                </div>
+            </div>
+
+            <!-- Notifications List -->
+            <div class="space-y-4" th:if="${not #lists.isEmpty(notifications)}">
+                <div th:each="notification : ${notifications}" 
+                    th:classappend="${notification.isRead ? 'bg-white' : 'bg-blue-50 border-l-4 border-l-blue-600'}"
+                    class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
+                    
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3">
+                                <h2 class="text-lg font-bold text-gray-900" th:text="${notification.title}">Title</h2>
+                                <span th:classappend="${notification.priority == 'CRITICAL' ? 'bg-red-100 text-red-800' : notification.priority == 'HIGH' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-800'}"
+                                    class="px-3 py-1 text-xs font-semibold rounded-full"
+                                    th:text="${notification.priority}">Priority</span>
+                                <span th:classappend="${notification.type == 'ALERT' ? 'bg-red-100 text-red-800' : notification.type == 'REMINDER' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}"
+                                    class="px-3 py-1 text-xs font-semibold rounded-full"
+                                    th:text="${notification.type}">Type</span>
+                                <span th:if="${!notification.isRead}" class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                            </div>
+                            <p class="text-gray-700 mt-3" th:text="${notification.message}">Message</p>
+                            <p class="text-sm text-gray-500 mt-3">
+                                <i class="fas fa-clock mr-2"></i>
+                                <span th:text="${#dates.format(notification.createdAt, 'dd MMM yyyy HH:mm')}">Time</span>
+                            </p>
+                        </div>
+
+                        <div class="flex gap-2 ml-4">
+                            <form th:if="${!notification.isRead}" th:action="@{/notifications/{id}/mark-read(id=${notification.id})}" method="post">
+                                <button type="submit" class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold py-2 px-4 rounded text-sm" title="Mark as read">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </form>
+                            <form th:action="@{/notifications/delete/{id}(id=${notification.id})}" method="post">
+                                <button type="submit" class="bg-red-100 hover:bg-red-200 text-red-700 font-semibold py-2 px-4 rounded text-sm" onclick="return confirm('Delete this notification?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div th:if="${notification.actionUrl != null}" class="mt-4">
+                        <a th:href="${notification.actionUrl}" class="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                            <i class="fas fa-arrow-right mr-2"></i>View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(notifications)}" class="text-center py-12">
+                <i class="fas fa-bell text-gray-400 text-6xl mb-4"></i>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">No notifications</h2>
+                <p class="text-gray-600 mb-6">You're all caught up!</p>
+            </div>
+
+            <!-- Pagination -->
+            <div th:if="${totalPages > 1}" class="flex justify-center gap-2 mt-8">
+                <a th:if="${currentPage > 0}" th:href="@{/notifications(page=${currentPage - 1})}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Previous</a>
+                <span class="px-4 py-2 bg-blue-600 text-white rounded" th:text="${currentPage + 1} + '/' + ${totalPages}">1/1</span>
+                <a th:if="${currentPage < totalPages - 1}" th:href="@{/notifications(page=${currentPage + 1})}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Next</a>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - UrbanMove</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/dashboard" class="flex items-center">
+                        <i class="fas fa-map-location-dot text-blue-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-800">UrbanMove</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                    <a href="/vehicles" class="text-gray-600 hover:text-gray-900">Vehicles</a>
+                    <a href="/routes" class="text-gray-600 hover:text-gray-900">Routes</a>
+                    <a href="/analytics" class="text-blue-600 font-semibold">Analytics</a>
+                    <a href="/profile" class="text-gray-600 hover:text-gray-900">Profile</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">Analytics Dashboard</h1>
+            <p class="text-gray-600 mt-2">Real-time insights and performance metrics</p>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- Total Routes -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold">Total Routes</p>
+                        <p class="text-4xl font-bold text-gray-900 mt-2">156</p>
+                    </div>
+                    <div class="bg-blue-100 rounded-lg p-4">
+                        <i class="fas fa-route text-blue-600 text-2xl"></i>
+                    </div>
+                </div>
+                <p class="text-green-600 text-sm mt-4">
+                    <i class="fas fa-arrow-up"></i> 12% from last month
+                </p>
+            </div>
+
+            <!-- Active Vehicles -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold">Active Vehicles</p>
+                        <p class="text-4xl font-bold text-gray-900 mt-2">48</p>
+                    </div>
+                    <div class="bg-green-100 rounded-lg p-4">
+                        <i class="fas fa-car text-green-600 text-2xl"></i>
+                    </div>
+                </div>
+                <p class="text-green-600 text-sm mt-4">
+                    <i class="fas fa-arrow-up"></i> 8% from last week
+                </p>
+            </div>
+
+            <!-- Total Distance -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold">Total Distance</p>
+                        <p class="text-4xl font-bold text-gray-900 mt-2">3,420 km</p>
+                    </div>
+                    <div class="bg-purple-100 rounded-lg p-4">
+                        <i class="fas fa-globe text-purple-600 text-2xl"></i>
+                    </div>
+                </div>
+                <p class="text-green-600 text-sm mt-4">
+                    <i class="fas fa-arrow-up"></i> 5% increase
+                </p>
+            </div>
+
+            <!-- Completion Rate -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold">Completion Rate</p>
+                        <p class="text-4xl font-bold text-gray-900 mt-2">98%</p>
+                    </div>
+                    <div class="bg-orange-100 rounded-lg p-4">
+                        <i class="fas fa-chart-pie text-orange-600 text-2xl"></i>
+                    </div>
+                </div>
+                <p class="text-green-600 text-sm mt-4">
+                    <i class="fas fa-arrow-up"></i> 2% improvement
+                </p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Routes Trend -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-lg font-bold text-gray-900 mb-4">Routes Trend (Last 30 Days)</h2>
+                <canvas id="routesChart"></canvas>
+            </div>
+
+            <!-- Vehicle Status Distribution -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-lg font-bold text-gray-900 mb-4">Vehicle Status</h2>
+                <canvas id="vehicleChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Performance Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h2 class="text-lg font-bold text-gray-900">Top Performing Vehicles</h2>
+            </div>
+            <table class="w-full">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Vehicle</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Trips</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Distance (km)</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Efficiency</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-6 py-4 text-sm">
+                            <div class="font-semibold text-gray-900">Toyota Prius</div>
+                            <div class="text-gray-600">TP-2024-001</div>
+                        </td>
+                        <td class="px-6 py-4 text-sm">45</td>
+                        <td class="px-6 py-4 text-sm">1,250</td>
+                        <td class="px-6 py-4 text-sm">
+                            <div class="w-32 bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">Active</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 text-sm">
+                            <div class="font-semibold text-gray-900">Tesla Model 3</div>
+                            <div class="text-gray-600">TM-2024-002</div>
+                        </td>
+                        <td class="px-6 py-4 text-sm">38</td>
+                        <td class="px-6 py-4 text-sm">980</td>
+                        <td class="px-6 py-4 text-sm">
+                            <div class="w-32 bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 88%"></div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">Active</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Routes Trend Chart
+        const routesCtx = document.getElementById('routesChart').getContext('2d');
+        new Chart(routesCtx, {
+            type: 'line',
+            data: {
+                labels: ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
+                datasets: [{
+                    label: 'Routes Completed',
+                    data: [12, 19, 15, 25, 22, 30, 28],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Vehicle Status Chart
+        const vehicleCtx = document.getElementById('vehicleChart').getContext('2d');
+        new Chart(vehicleCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Active', 'Idle', 'Maintenance'],
+                datasets: [{
+                    data: [48, 12, 5],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">UrbanMove</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            padding-top: 64px;
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #e5e7eb;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 64px;
+            width: 250px;
+            height: calc(100vh - 64px);
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+            z-index: 40;
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+        
+        .main-wrapper {
+            margin-left: 250px;
+            min-height: calc(100vh - 64px);
+            transition: margin-left 0.3s ease;
+        }
+        
+        .main-wrapper.full-width {
+            margin-left: 0;
+        }
+        
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: #6b7280;
+            text-decoration: none;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .sidebar-menu-item:hover {
+            background-color: #f3f4f6;
+            color: #2563eb;
+        }
+        
+        .sidebar-menu-item i {
+            margin-right: 0.75rem;
+            width: 20px;
+        }
+        
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .submenu.open {
+            max-height: 500px;
+        }
+        
+        .submenu-item {
+            display: block;
+            padding: 0.5rem 1.5rem 0.5rem 3.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .submenu-item:hover {
+            background-color: #f3f4f6;
+            color: #2563eb;
+        }
+        
+        @media (max-width: 768px) {
+            .main-wrapper {
+                margin-left: 0;
+            }
+            
+            .sidebar.hidden {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <button id="sidebarToggle" class="text-gray-600 hover:text-blue-600 p-2 mr-4 md:hidden">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-map-location-dot" style="color: #2563eb; font-size: 1.5rem;"></i>
+            <span style="font-size: 1.25rem; font-weight: bold; color: #111827;">UrbanMove</span>
+        </div>
+        <div style="margin-left: auto;">
+            <div style="position: relative;">
+                <button style="display: flex; align-items: center; gap: 0.5rem; background: none; border: none; cursor: pointer; color: #6b7280;" 
+                   id="profileBtn">
+                    <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+                </button>
+                <div style="position: absolute; right: 0; margin-top: 0.5rem; width: 200px; background: white; border-radius: 0.5rem; box-shadow: 0 10px 15px rgba(0,0,0,0.1); padding: 0.5rem; display: none; z-index: 50;" 
+                     id="profileMenu">
+                    <a th:href="@{/profile}" style="display: block; padding: 0.5rem 1rem; color: #6b7280; text-decoration: none; border-radius: 0.5rem;">
+                        <i class="fas fa-user" style="margin-right: 0.5rem;"></i> My Profile
+                    </a>
+                    <a th:href="@{/settings}" style="display: block; padding: 0.5rem 1rem; color: #6b7280; text-decoration: none; border-radius: 0.5rem;">
+                        <i class="fas fa-cog" style="margin-right: 0.5rem;"></i> Settings
+                    </a>
+                    <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #e5e7eb;">
+                    <a th:href="@{/logout}" style="display: block; padding: 0.5rem 1rem; color: #dc2626; text-decoration: none; border-radius: 0.5rem;">
+                        <i class="fas fa-sign-out-alt" style="margin-right: 0.5rem;"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar" style="transform: translateX(0);">
+        <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+            <h3 style="font-size: 1.125rem; font-weight: bold; color: #111827;">Menu</h3>
+        </div>
+        
+        <div style="padding: 1rem 0;">
+            <!-- Dashboard -->
+            <a th:href="@{/dashboard}" class="sidebar-menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <!-- Core Management -->
+            <div style="padding: 0.75rem 1.5rem; margin-top: 1rem;">
+                <p style="font-size: 0.75rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em;">Core Management</p>
+            </div>
+            
+            <!-- Vehicles -->
+            <button class="sidebar-menu-item" onclick="toggleSubmenu(this)">
+                <i class="fas fa-car"></i>
+                <span>Vehicles</span>
+                <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.75rem; transition: transform 0.3s ease;"></i>
+            </button>
+            <div class="submenu">
+                <a th:href="@{/vehicles}" class="submenu-item">View All</a>
+                <a th:href="@{/vehicles/add}" class="submenu-item">Add Vehicle</a>
+            </div>
+            
+            <!-- Routes -->
+            <button class="sidebar-menu-item" onclick="toggleSubmenu(this)">
+                <i class="fas fa-route"></i>
+                <span>Routes</span>
+                <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.75rem; transition: transform 0.3s ease;"></i>
+            </button>
+            <div class="submenu">
+                <a th:href="@{/routes}" class="submenu-item">View All</a>
+                <a th:href="@{/routes/add}" class="submenu-item">Create Route</a>
+            </div>
+            
+            <!-- Fleets -->
+            <button class="sidebar-menu-item" onclick="toggleSubmenu(this)">
+                <i class="fas fa-layer-group"></i>
+                <span>Fleets</span>
+                <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.75rem; transition: transform 0.3s ease;"></i>
+            </button>
+            <div class="submenu">
+                <a th:href="@{/fleets}" class="submenu-item">View All</a>
+                <a th:href="@{/fleets/add}" class="submenu-item">Create Fleet</a>
+            </div>
+            
+            <!-- Events -->
+            <a th:href="@{/events}" class="sidebar-menu-item">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Events & Alerts</span>
+            </a>
+            
+            <!-- Analytics & Reports -->
+            <div style="padding: 0.75rem 1.5rem; margin-top: 1rem;">
+                <p style="font-size: 0.75rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em;">Analytics & Reports</p>
+            </div>
+            
+            <!-- Analytics -->
+            <a th:href="@{/analytics}" class="sidebar-menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Analytics</span>
+            </a>
+            
+            <!-- Notifications -->
+            <a th:href="@{/notifications}" class="sidebar-menu-item">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+            </a>
+            
+            <!-- Account -->
+            <div style="padding: 0.75rem 1.5rem; margin-top: 1rem;">
+                <p style="font-size: 0.75rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em;">Account</p>
+            </div>
+            
+            <!-- Profile -->
+            <a th:href="@{/profile}" class="sidebar-menu-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+            
+            <!-- Settings -->
+            <a th:href="@{/settings}" class="sidebar-menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            
+            <!-- Logout -->
+            <a th:href="@{/logout}" class="sidebar-menu-item" style="color: #dc2626;">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper" id="mainWrapper">
+        <div style="max-width: 80rem; margin: 0 auto; padding: 2rem 1.5rem;">
+            <!-- Messages/Alerts -->
+            <div th:if="${message}" style="margin-bottom: 1rem; padding: 1rem; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.5rem; color: #166534;">
+                <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                <span th:text="${message}"></span>
+            </div>
+            
+            <div th:if="${error}" style="margin-bottom: 1rem; padding: 1rem; background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 0.5rem; color: #991b1b;">
+                <i class="fas fa-exclamation-circle" style="margin-right: 0.5rem;"></i>
+                <span th:text="${error}"></span>
+            </div>
+            
+            <!-- Page Content Fragment -->
+            <div layout:fragment="content"></div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer style="background-color: #111827; color: #d1d5db; margin-top: 4rem;">
+        <div style="max-width: 80rem; margin: 0 auto; padding: 2rem 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 1.5rem;">
+                <div>
+                    <h3 style="color: white; font-weight: bold; margin-bottom: 1rem;">UrbanMove</h3>
+                    <p style="font-size: 0.875rem;">Cloud-native smart mobility management platform for modern cities.</p>
+                </div>
+                <div>
+                    <h4 style="color: white; font-weight: bold; margin-bottom: 1rem;">Quick Links</h4>
+                    <ul style="font-size: 0.875rem; list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #d1d5db; text-decoration: none;">About Us</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #d1d5db; text-decoration: none;">Documentation</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #d1d5db; text-decoration: none;">API Docs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: white; font-weight: bold; margin-bottom: 1rem;">Contact</h4>
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;">Email: info@urbanmove.com</p>
+                    <p style="font-size: 0.875rem;">Phone: +1 (555) 123-4567</p>
+                </div>
+            </div>
+            <hr style="border: none; border-top: 1px solid #374151; margin-bottom: 1.5rem;">
+            <div style="text-align: center; font-size: 0.875rem;">
+                <p>&copy; 2024 UrbanMove. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script th:src="@{/js/main.js}"></script>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const mainWrapper = document.getElementById('mainWrapper');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const profileBtn = document.getElementById('profileBtn');
+        const profileMenu = document.getElementById('profileMenu');
+        
+        // Sidebar toggle
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                mainWrapper.classList.toggle('full-width');
+            });
+        }
+        
+        // Profile menu toggle
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+        
+        document.addEventListener('click', () => {
+            if (profileMenu) profileMenu.style.display = 'none';
+        });
+        
+        // Submenu toggle
+        function toggleSubmenu(button) {
+            const submenu = button.nextElementSibling;
+            if (submenu && submenu.classList.contains('submenu')) {
+                submenu.classList.toggle('open');
+                const chevron = button.querySelector('.fa-chevron-down');
+                if (chevron) {
+                    chevron.style.transform = submenu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - UrbanMove</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-md">
+        <!-- Card -->
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-12 text-center text-white">
+                <div class="flex justify-center mb-4">
+                    <i class="fas fa-user-plus text-4xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold mb-2">Create Account</h1>
+                <p class="text-blue-100">Join UrbanMove today</p>
+            </div>
+
+            <!-- Form -->
+            <div class="px-8 py-8">
+                <div th:if="${error}" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <span th:text="${error}"></span>
+                </div>
+
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <!-- Full Name -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 transition duration-200" placeholder="John Doe">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Email Address</label>
+                        <input type="email" id="email" name="email" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 transition duration-200" placeholder="john@example.com">
+                    </div>
+
+                    <!-- Username -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
+                        <input type="text" id="username" name="username" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 transition duration-200" placeholder="johndoe">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Phone Number</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 transition duration-200" placeholder="+1234567890">
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
+                        <input type="password" id="password" name="password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 transition duration-200" placeholder="••••••••">
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 transition duration-200" placeholder="••••••••">
+                    </div>
+
+                    <!-- Sign Up Button -->
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200 ease-in-out transform hover:scale-105">
+                        <i class="fas fa-check mr-2"></i>Create Account
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="my-6 flex items-center">
+                    <div class="flex-grow border-t border-gray-300"></div>
+                    <span class="px-3 text-gray-500 text-sm">Already have an account?</span>
+                    <div class="flex-grow border-t border-gray-300"></div>
+                </div>
+
+                <!-- Sign In Link -->
+                <a href="/login" class="block w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-lg transition duration-200">
+                    Sign In
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-center text-white text-sm mt-6">© 2026 UrbanMove. All rights reserved.</p>
+    </div>
+
+    <script>
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            const registerRequest = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                username: document.getElementById('username').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                password: password
+            };
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(registerRequest)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Registration successful! Please log in.');
+                    window.location.href = '/login';
+                } else {
+                    const error = await response.json();
+                    alert('Registration failed: ' + error.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during registration');
+            }
+        }
+    </script>
+</body>
+</html>

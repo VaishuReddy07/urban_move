@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fleets Management - Urban Move</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style> * { font-family: 'Inter', sans-serif; } body { background-color: #f9fafb; } </style>
+</head>
+<body>
+        <div class="container mx-auto px-4 py-8">
+            <!-- Page Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Fleet Management</h1>
+                    <p class="text-gray-600 mt-2">Manage and monitor your vehicle fleets</p>
+                </div>
+                <a href="/fleets/add" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">
+                    <i class="fas fa-plus mr-2"></i>Add New Fleet
+                </a>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                <form method="get" th:action="@{/fleets}" class="flex gap-4">
+                    <input type="text" placeholder="Search fleets..." name="search" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Fleets Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" th:if="${not #lists.isEmpty(fleets)}">
+                <div th:each="fleet : ${fleets}" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900" th:text="${fleet.name}">Fleet Name</h2>
+                            <p class="text-sm text-gray-600 mt-1" th:text="${'Code: ' + fleet.fleetCode}">Fleet Code</p>
+                        </div>
+                        <span th:classappend="${fleet.status == 'OPERATIONAL' ? 'bg-green-100 text-green-800' : fleet.status == 'MAINTENANCE' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}"
+                            class="px-3 py-1 text-xs font-semibold rounded-full"
+                            th:text="${fleet.status}">Status</span>
+                    </div>
+
+                    <div class="space-y-3 my-4 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Base Location:</span>
+                            <span class="text-gray-900 font-medium" th:text="${fleet.baseLocation}">Location</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Total Vehicles:</span>
+                            <span class="text-gray-900 font-semibold" th:text="${fleet.totalVehicles}">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Active Vehicles:</span>
+                            <span class="text-green-600 font-semibold" th:text="${fleet.activeVehicles}">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Total Distance:</span>
+                            <span class="text-gray-900 font-medium" th:text="${fleet.totalDistanceKm + ' km'}">0 km</span>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-600 mb-4" th:text="${fleet.description}">Fleet description</p>
+
+                    <div class="flex gap-2 pt-4 border-t border-gray-200">
+                        <a th:href="@{/fleets/edit/{id}(id=${fleet.id})}" class="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold py-2 px-3 rounded text-center text-sm">
+                            <i class="fas fa-edit mr-2"></i>Edit
+                        </a>
+                        <form th:action="@{/fleets/delete/{id}(id=${fleet.id})}" method="post" class="flex-1">
+                            <button type="submit" class="w-full bg-red-100 hover:bg-red-200 text-red-700 font-semibold py-2 px-3 rounded text-sm" 
+                                onclick="return confirm('Are you sure?')">
+                                <i class="fas fa-trash mr-2"></i>Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(fleets)}" class="text-center py-12">
+                <i class="fas fa-layer-group text-gray-400 text-6xl mb-4"></i>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">No fleets yet</h2>
+                <p class="text-gray-600 mb-6">Create your first fleet to get started</p>
+                <a href="/fleets/add" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded-lg">
+                    <i class="fas fa-plus mr-2"></i>Create Fleet
+                </a>
+            </div>
+
+            <!-- Pagination -->
+            <div th:if="${totalPages > 1}" class="flex justify-center gap-2 mt-8">
+                <a th:if="${currentPage > 0}" th:href="@{/fleets(page=${currentPage - 1})}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Previous</a>
+                <span class="px-4 py-2 bg-blue-600 text-white rounded" th:text="${currentPage + 1} + '/' + ${totalPages}">1/1</span>
+                <a th:if="${currentPage < totalPages - 1}" th:href="@{/fleets(page=${currentPage + 1})}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Next</a>
+            </div>
+        </div>
+    </div>
+    <!-- End of fleets content -->
+</body>
+</html>
+</html>

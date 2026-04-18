@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanMove - Smart Mobility Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .feature-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-map-location-dot text-blue-600 text-2xl mr-2"></i>
+                    <span class="text-xl font-bold text-gray-900">UrbanMove</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#features" class="text-gray-600 hover:text-gray-900 font-medium">Features</a>
+                    <a href="#about" class="text-gray-600 hover:text-gray-900 font-medium">About</a>
+                    <a href="/login" class="text-gray-600 hover:text-gray-900 font-medium">Sign In</a>
+                    <a href="/register" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-200">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-5xl font-bold mb-6">Smart Mobility Management Platform</h1>
+                    <p class="text-xl text-gray-100 mb-8">Revolutionize your fleet operations with real-time tracking, route optimization, and intelligent analytics.</p>
+                    <div class="flex space-x-4">
+                        <a href="/register" class="bg-white text-blue-600 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition duration-200">
+                            <i class="fas fa-play mr-2"></i>Start Free Trial
+                        </a>
+                        <a href="#features" class="border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition duration-200">
+                            <i class="fas fa-arrow-down mr-2"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <div class="bg-white rounded-xl shadow-2xl p-8 max-w-sm">
+                        <div class="text-center">
+                            <i class="fas fa-location-dot text-6xl text-blue-600 mb-4"></i>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Real-Time Tracking</h3>
+                            <p class="text-gray-600">Track your fleet movements with precision and get instant notifications.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Powerful Features</h2>
+                <p class="text-xl text-gray-600">Everything you need to manage your mobility operations efficiently</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-card bg-white rounded-xl shadow-md p-8">
+                    <div class="bg-blue-100 rounded-lg w-16 h-16 flex items-center justify-center mb-6">
+                        <i class="fas fa-satellite text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">GPS Tracking</h3>
+                    <p class="text-gray-600">Real-time location tracking with historical data and geofencing capabilities.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card bg-white rounded-xl shadow-md p-8">
+                    <div class="bg-green-100 rounded-lg w-16 h-16 flex items-center justify-center mb-6">
+                        <i class="fas fa-route text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Route Optimization</h3>
+                    <p class="text-gray-600">AI-powered route planning to minimize travel time and fuel consumption.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card bg-white rounded-xl shadow-md p-8">
+                    <div class="bg-purple-100 rounded-lg w-16 h-16 flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Advanced Analytics</h3>
+                    <p class="text-gray-600">Comprehensive dashboards with KPIs, performance metrics, and insights.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card bg-white rounded-xl shadow-md p-8">
+                    <div class="bg-orange-100 rounded-lg w-16 h-16 flex items-center justify-center mb-6">
+                        <i class="fas fa-bell text-orange-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Smart Alerts</h3>
+                    <p class="text-gray-600">Real-time notifications for delays, maintenance needs, and anomalies.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="feature-card bg-white rounded-xl shadow-md p-8">
+                    <div class="bg-red-100 rounded-lg w-16 h-16 flex items-center justify-center mb-6">
+                        <i class="fas fa-users text-red-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Team Management</h3>
+                    <p class="text-gray-600">Manage drivers, assign tasks, and track team performance effortlessly.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="feature-card bg-white rounded-xl shadow-md p-8">
+                    <div class="bg-cyan-100 rounded-lg w-16 h-16 flex items-center justify-center mb-6">
+                        <i class="fas fa-shield text-cyan-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Enterprise Security</h3>
+                    <p class="text-gray-600">Bank-grade encryption and compliance with industry standards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="bg-blue-600 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-bold mb-2">500+</div>
+                    <p class="text-blue-100">Active Operators</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">50K+</div>
+                    <p class="text-blue-100">Vehicles Tracked</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">100M+</div>
+                    <p class="text-blue-100">Miles Optimized</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">99.9%</div>
+                    <p class="text-blue-100">Uptime</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold text-gray-900 mb-6">Ready to Transform Your Fleet?</h2>
+            <p class="text-xl text-gray-600 mb-8">Join hundreds of companies using UrbanMove to optimize their mobility operations.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="/register" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200">
+                    <i class="fas fa-rocket mr-2"></i>Get Started Free
+                </a>
+                <a href="/login" class="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-3 px-8 rounded-lg transition duration-200">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-white font-bold mb-4">About UrbanMove</h3>
+                    <p class="text-sm">Leading smart mobility management platform for modern fleet operations.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Product</h3>
+                    <ul class="text-sm space-y-2">
+                        <li><a href="#" class="hover:text-white">Features</a></li>
+                        <li><a href="#" class="hover:text-white">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white">Security</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Company</h3>
+                    <ul class="text-sm space-y-2">
+                        <li><a href="#" class="hover:text-white">Blog</a></li>
+                        <li><a href="#" class="hover:text-white">Careers</a></li>
+                        <li><a href="#" class="hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-white"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm">
+                <p>&copy; 2026 UrbanMove. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

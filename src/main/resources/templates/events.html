@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Mobility Events - Urban Move</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style> * { font-family: 'Inter', sans-serif; } body { background-color: #f9fafb; } </style>
+</head>
+<body>
+        <div class="container mx-auto px-4 py-8">
+            <!-- Page Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Mobility Events</h1>
+                    <p class="text-gray-600 mt-2">Monitor and track real-time transportation events</p>
+                </div>
+                <a href="/events/add" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">
+                    <i class="fas fa-plus mr-2"></i>Log Event
+                </a>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                <form method="get" th:action="@{/events}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="text" placeholder="Search events..." name="search" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select name="severity" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Severity Levels</option>
+                        <option value="INFO">Info</option>
+                        <option value="WARNING">Warning</option>
+                        <option value="CRITICAL">Critical</option>
+                    </select>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Events Table -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" th:if="${not #lists.isEmpty(events)}">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Event Type</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Vehicle</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Description</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Severity</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Location</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Speed</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Timestamp</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr th:each="event : ${events}" class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full" th:text="${event.eventType}">Event</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900" th:text="${event.vehicle?.plateNumber}">Vehicle</td>
+                            <td class="px-6 py-4 text-sm text-gray-600" th:text="${#strings.abbreviate(event.description, 50)}">Description</td>
+                            <td class="px-6 py-4">
+                                <span th:classappend="${event.severity == 'CRITICAL' ? 'bg-red-100 text-red-800' : event.severity == 'WARNING' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}"
+                                    class="px-3 py-1 text-xs font-semibold rounded-full"
+                                    th:text="${event.severity}">Severity</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">
+                                <span th:text="${event.latitude + ', ' + event.longitude}">Location</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-900" th:text="${event.speed + ' km/h'}">Speed</td>
+                            <td class="px-6 py-4 text-sm text-gray-600" th:text="${#calendars.format(event.eventTimestamp, 'dd MMM yyyy HH:mm')}">Timestamp</td>
+                            <td class="px-6 py-4 text-sm">
+                                <div class="flex gap-2">
+                                    <a th:href="@{/events/{id}(id=${event.id})}" class="text-blue-600 hover:text-blue-700 font-medium">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <form th:action="@{/events/delete/{id}(id=${event.id})}" method="post" style="display:inline;">
+                                        <button type="submit" class="text-red-600 hover:text-red-700 font-medium" onclick="return confirm('Delete this event?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(events)}" class="text-center py-12">
+                <i class="fas fa-chart-line text-gray-400 text-6xl mb-4"></i>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">No events logged</h2>
+                <p class="text-gray-600 mb-6">Start logging mobility events to monitor your fleet</p>
+                <a href="/events/add" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded-lg">
+                    <i class="fas fa-plus mr-2"></i>Log Event
+                </a>
+            </div>
+
+            <!-- Pagination -->
+            <div th:if="${totalPages > 1}" class="flex justify-center gap-2 mt-8">
+                <a th:if="${currentPage > 0}" th:href="@{/events(page=${currentPage - 1})}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Previous</a>
+                <span class="px-4 py-2 bg-blue-600 text-white rounded" th:text="${currentPage + 1} + '/' + ${totalPages}">1/1</span>
+                <a th:if="${currentPage < totalPages - 1}" th:href="@{/events(page=${currentPage + 1})}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Next</a>
+            </div>
+        </div>
+    </div>
+    <!-- End of events content -->
+</body>
+</html>
+</html>

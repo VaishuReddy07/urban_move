@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Route Form - Urban Move</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style> * { font-family: 'Inter', sans-serif; } body { background-color: #f9fafb; } </style>
+</head>
+<body>
+        <div class="container mx-auto px-4 py-8">
+            <div class="max-w-3xl mx-auto">
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        <span th:if="${route.id == null}">Create New Route</span>
+                        <span th:if="${route.id != null}">Edit Route</span>
+                    </h1>
+                    <p class="text-gray-600 mt-2">Fill in the route details and locations</p>
+                </div>
+
+                <!-- Form -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                    <form method="post" th:object="${route}" th:action="${route.id == null ? '/routes/add' : '/routes/edit/' + route.id}">
+                        <!-- Route Information Section -->
+                        <div class="mb-8 pb-8 border-b border-gray-200">
+                            <h2 class="text-xl font-bold text-gray-900 mb-6">Route Information</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Route Name -->
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Route Name *</label>
+                                    <input type="text" th:field="*{name}" placeholder="e.g., Downtown Delivery Route" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                        required>
+                                </div>
+
+                                <!-- Status -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
+                                    <select th:field="*{status}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                        <option value="PLANNED">Planned</option>
+                                        <option value="IN_PROGRESS">In Progress</option>
+                                        <option value="COMPLETED">Completed</option>
+                                        <option value="CANCELLED">Cancelled</option>
+                                    </select>
+                                </div>
+
+                                <!-- Assigned Vehicle -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Assigned Vehicle</label>
+                                    <select th:field="*{vehicle}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <option value="">Not Assigned</option>
+                                        <option th:each="vehicle : ${vehicles}" th:value="${vehicle.id}" th:text="${vehicle.plateNumber + ' - ' + vehicle.make + ' ' + vehicle.model}">Vehicle</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Start Location Section -->
+                        <div class="mb-8 pb-8 border-b border-gray-200">
+                            <h2 class="text-xl font-bold text-gray-900 mb-6">Starting Location</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Start Location -->
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Starting Location *</label>
+                                    <input type="text" th:field="*{startLocation}" placeholder="e.g., Downtown Hub" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                        required>
+                                </div>
+
+                                <!-- Start Latitude -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Latitude *</label>
+                                    <input type="number" th:field="*{startLatitude}" step="0.0001" placeholder="0.0000" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                        required>
+                                </div>
+
+                                <!-- Start Longitude -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Longitude *</label>
+                                    <input type="number" th:field="*{startLongitude}" step="0.0001" placeholder="0.0000" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- End Location Section -->
+                        <div class="mb-8 pb-8 border-b border-gray-200">
+                            <h2 class="text-xl font-bold text-gray-900 mb-6">Ending Location</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- End Location -->
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ending Location *</label>
+                                    <input type="text" th:field="*{endLocation}" placeholder="e.g., Suburban Terminal" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                        required>
+                                </div>
+
+                                <!-- End Latitude -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Latitude *</label>
+                                    <input type="number" th:field="*{endLatitude}" step="0.0001" placeholder="0.0000" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                        required>
+                                </div>
+
+                                <!-- End Longitude -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Longitude *</label>
+                                    <input type="number" th:field="*{endLongitude}" step="0.0001" placeholder="0.0000" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Route Metrics Section -->
+                        <div class="mb-8">
+                            <h2 class="text-xl font-bold text-gray-900 mb-6">Route Metrics</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Distance -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Distance (km) *</label>
+                                    <input type="number" th:field="*{distanceKm}" min="0" step="0.1" placeholder="0.0" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                        required>
+                                </div>
+
+                                <!-- Estimated Duration -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Estimated Duration (minutes) *</label>
+                                    <input type="number" th:field="*{estimatedDurationMinutes}" min="1" step="5" placeholder="60" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                        required>
+                                </div>
+
+                                <!-- Actual Distance -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Actual Distance (km)</label>
+                                    <input type="number" th:field="*{actualDistanceKm}" min="0" step="0.1" placeholder="0.0" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+
+                                <!-- Actual Duration -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Actual Duration (minutes)</label>
+                                    <input type="number" th:field="*{actualDurationMinutes}" min="0" step="5" placeholder="0" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex gap-4 mt-8">
+                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
+                                <i class="fas fa-save mr-2"></i>
+                                <span th:if="${route.id == null}">Create Route</span>
+                                <span th:if="${route.id != null}">Update Route</span>
+                            </button>
+                            <a href="/routes" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-lg text-center transition duration-200">
+                                <i class="fas fa-times mr-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of route form content -->
+</body>
+</html>
+</html>

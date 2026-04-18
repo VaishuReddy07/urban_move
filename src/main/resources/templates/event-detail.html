@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Event Details - Urban Move</title>
+</head>
+<div layout:fragment="content">
+        <div class="container mx-auto px-4 py-8">
+            <div class="max-w-3xl mx-auto">
+                <!-- Back Link -->
+                <a href="/events" class="text-blue-600 hover:text-blue-700 font-medium mb-6 inline-block">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Events
+                </a>
+
+                <!-- Event Details -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900" th:text="${event.eventType}">Event Type</h1>
+                            <p class="text-gray-600 mt-2" th:text="${#calendars.format(event.eventTimestamp, 'dd MMM yyyy HH:mm:ss')}">Timestamp</p>
+                        </div>
+                        <span th:classappend="${event.severity == 'CRITICAL' ? 'bg-red-100 text-red-800' : event.severity == 'WARNING' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}"
+                            class="px-4 py-2 text-sm font-semibold rounded-full"
+                            th:text="${event.severity}">Severity</span>
+                    </div>
+
+                    <!-- Event Information Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 pb-8 border-b border-gray-200">
+                        <!-- Left Column -->
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Vehicle</p>
+                                <p class="text-lg font-semibold text-gray-900" th:text="${event.vehicle?.plateNumber}">Vehicle</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Speed</p>
+                                <p class="text-lg font-semibold text-gray-900" th:text="${event.speed + ' km/h'}">Speed</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Processed</p>
+                                <p class="text-lg font-semibold" th:classappend="${event.processed ? 'text-green-600' : 'text-yellow-600'}" 
+                                    th:text="${event.processed ? 'Yes' : 'No'}">Status</p>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Location (GPS)</p>
+                                <p class="text-lg font-semibold text-gray-900" th:text="${event.latitude + ', ' + event.longitude}">Location</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Created At</p>
+                                <p class="text-lg font-semibold text-gray-900" th:text="${#calendars.format(event.createdAt, 'dd MMM yyyy HH:mm')}">Date</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-8">
+                        <h2 class="text-lg font-bold text-gray-900 mb-3">Description</h2>
+                        <p class="text-gray-700 leading-relaxed" th:text="${event.description}">Description</p>
+                    </div>
+
+                    <!-- Metadata (if exists) -->
+                    <div th:if="${event.metadata != null}" class="mb-8">
+                        <h2 class="text-lg font-bold text-gray-900 mb-3">Additional Information</h2>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <pre class="text-sm text-gray-700 whitespace-pre-wrap" th:text="${event.metadata}">Metadata</pre>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-4 pt-8 border-t border-gray-200">
+                        <form th:action="@{/events/delete/{id}(id=${event.id})}" method="post" class="flex-1">
+                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg" onclick="return confirm('Delete this event?')">
+                                <i class="fas fa-trash mr-2"></i>Delete Event
+                            </button>
+                        </form>
+                        <a href="/events" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-lg text-center">
+                            <i class="fas fa-times mr-2"></i>Close
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Routes Management - Urban Move</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style> * { font-family: 'Inter', sans-serif; } body { background-color: #f9fafb; } </style>
+</head>
+<body>
+
+        <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/dashboard" class="flex items-center">
+                        <i class="fas fa-map-location-dot text-blue-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-800">UrbanMove</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                    <a href="/vehicles" class="text-gray-600 hover:text-gray-900">Vehicles</a>
+                    <a href="/routes" class="text-gray-600 hover:text-gray-900">Routes</a>
+                    <a href="/analytics" class="text-blue-600 font-semibold">Analytics</a>
+                    <a href="/profile" class="text-gray-600 hover:text-gray-900">Profile</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+        <div class="container mx-auto px-4 py-8">
+            <!-- Page Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Route Management</h1>
+                    <p class="text-gray-600 mt-2">Manage and optimize your delivery routes</p>
+                    <!-- End of routes content -->
+                </body>
+                </html>
+                <a href="/routes/add" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">
+                    <i class="fas fa-plus mr-2"></i>Add New Route
+                </a>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white rounded-lg shadow p-4 border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Total Routes</p>
+                            <p class="text-2xl font-bold text-gray-900 mt-1" th:text="${totalRoutes}">0</p>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-lg">
+                            <i class="fas fa-route text-blue-600 text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4 border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Active Routes</p>
+                            <p class="text-2xl font-bold text-green-600 mt-1" th:text="${activeRoutes}">0</p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-lg">
+                            <i class="fas fa-check-circle text-green-600 text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4 border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Planned Routes</p>
+                            <p class="text-2xl font-bold text-yellow-600 mt-1" th:text="${totalRoutes - activeRoutes}">0</p>
+                        </div>
+                        <div class="bg-yellow-100 p-3 rounded-lg">
+                            <i class="fas fa-clock text-yellow-600 text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Routes Table -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" th:if="${not #lists.isEmpty(routes)}">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Route Name</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">From</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">To</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Distance</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Est. Duration</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Assigned Vehicle</th>
+                            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr th:each="route : ${routes}" class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900" th:text="${route.name}">Route 1</td>
+                            <td class="px-6 py-4 text-sm text-gray-600" th:text="${route.startLocation}">Location A</td>
+                            <td class="px-6 py-4 text-sm text-gray-600" th:text="${route.endLocation}">Location B</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">
+                                <span th:text="${#numbers.formatDecimal(route.distanceKm, 1, 2)} + ' km'">0.00 km</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600" th:text="${route.estimatedDurationMinutes + ' min'}">60 min</td>
+                            <td class="px-6 py-4 text-sm">
+                                <span th:classappend="${route.status == 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' : route.status == 'COMPLETED' ? 'bg-green-100 text-green-800' : route.status == 'CANCELLED' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}"
+                                    class="px-3 py-1 text-xs font-semibold rounded-full"
+                                    th:text="${route.status}">Planned</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600" th:text="${route.vehicle != null ? route.vehicle.plateNumber : 'Not Assigned'}">Not Assigned</td>
+                            <td class="px-6 py-4 text-center">
+                                <a th:href="@{/routes/{id}(id=${route.id})}" class="inline-block text-blue-600 hover:text-blue-800 mr-3" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a th:href="@{/routes/edit/{id}(id=${route.id})}" class="inline-block text-blue-600 hover:text-blue-800 mr-3" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form th:action="@{/routes/delete/{id}(id=${route.id})}" method="post" class="inline-block" onsubmit="return confirm('Are you sure?')">
+                                    <button type="submit" class="text-red-600 hover:text-red-800" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(routes)}" class="text-center py-12">
+                <i class="fas fa-route text-gray-400 text-6xl mb-4"></i>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">No routes yet</h2>
+                <p class="text-gray-600 mb-6">Create your first route to get started</p>
+                <a href="/routes/add" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded-lg">
+                    <i class="fas fa-plus mr-2"></i>Add Route
+                </a>
+            </div>
+
+            <!-- Pagination -->
+            <div th:if="${totalPages > 1}" class="flex justify-center gap-2 mt-8">
+                <a th:if="${currentPage > 0}" th:href="@{/routes(page=${currentPage - 1})}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Previous</a>
+                <span class="px-4 py-2 bg-blue-600 text-white rounded" th:text="${currentPage + 1} + '/' + ${totalPages}">1/1</span>
+                <a th:if="${currentPage < totalPages - 1}" th:href="@{/routes(page=${currentPage + 1})}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Next</a>
+            </div>
+        </div>
+    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                    <select id="statusFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        <option value="">All Statuses</option>
+                        <option value="PLANNED">Planned</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="COMPLETED">Completed</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Search</label>
+                    <input type="text" id="searchInput" placeholder="Search routes..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div class="flex items-end">
+                    <button onclick="filterRoutes()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
+                        <i class="fas fa-search mr-2"></i>Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Routes Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Route Name</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Start Location</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">End Location</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Distance</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="routesTableBody" class="divide-y divide-gray-200">
+                    <!-- Routes will be loaded here -->
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                            <i class="fas fa-inbox text-4xl mb-4"></i>
+                            <p>No routes available</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Create Route Modal -->
+    <div id="createRouteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Create New Route</h2>
+            <form id="createRouteForm" onsubmit="submitCreateRoute(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Route Name</label>
+                    <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Start Location</label>
+                    <input type="text" name="startLocation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">End Location</label>
+                    <input type="text" name="endLocation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Estimated Distance (km)</label>
+                    <input type="number" name="estimatedDistance" step="0.1" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="closeCreateRouteModal()" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-200">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openCreateRouteModal() {
+            document.getElementById('createRouteModal').classList.remove('hidden');
+        }
+
+        function closeCreateRouteModal() {
+            document.getElementById('createRouteModal').classList.add('hidden');
+            document.getElementById('createRouteForm').reset();
+        }
+
+        function submitCreateRoute(event) {
+            event.preventDefault();
+            // API call to create route
+            alert('Route creation would be submitted here');
+            closeCreateRouteModal();
+        }
+
+        function filterRoutes() {
+            // Filter implementation
+            console.log('Filtering routes...');
+        }
+
+        // Load routes on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load routes from API
+        });
+    </script>
+</body>
+</html>
