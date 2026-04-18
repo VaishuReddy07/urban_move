@@ -13,6 +13,32 @@
     <style> * { font-family: 'Inter', sans-serif; } body { background-color: #f9fafb; } </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/dashboard" class="flex items-center">
+                        <i class="fas fa-map-location-dot text-blue-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-800">UrbanMove</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                    <a href="/vehicles" class="text-blue-600 font-semibold">Vehicles</a>
+                    <a href="/routes" class="text-gray-600 hover:text-gray-900">Routes</a>
+                    <a href="/analytics" class="text-gray-600 hover:text-gray-900">Analytics</a>
+                    <a href="/profile" class="text-gray-600 hover:text-gray-900">Profile</a>
+                    <div class="border-l border-gray-300 pl-4">
+                        <a href="/logout" class="text-gray-600 hover:text-red-600 font-semibold transition">
+                            <i class="fas fa-sign-out-alt mr-1"></i>Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
         <div class="container mx-auto px-4 py-8">
             <!-- Page Header -->
             <div class="flex justify-between items-center mb-8">
