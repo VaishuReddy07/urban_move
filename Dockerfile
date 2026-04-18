@@ -1,17 +1,16 @@
-FROM eclipse-temurin:17-jre-alpine
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+
+WORKDIR /app
+COPY . .
+
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-# Copy built application
-COPY target/urban-move-*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
-# Expose port
 EXPOSE 8080
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
-
-# Run application
-ENTRYPOINT ["java"]
-CMD ["-Dspring.profiles.active=production", "-Xmx512m", "-Xms256m", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
