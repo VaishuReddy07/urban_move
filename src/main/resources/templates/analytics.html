@@ -49,14 +49,14 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-600 text-sm font-semibold">Total Routes</p>
-                        <p class="text-4xl font-bold text-gray-900 mt-2">156</p>
+                        <p class="text-4xl font-bold text-gray-900 mt-2" th:text="${totalRoutes} ?: '0'">156</p>
                     </div>
                     <div class="bg-blue-100 rounded-lg p-4">
                         <i class="fas fa-route text-blue-600 text-2xl"></i>
                     </div>
                 </div>
                 <p class="text-green-600 text-sm mt-4">
-                    <i class="fas fa-arrow-up"></i> 12% from last month
+                    <i class="fas fa-arrow-up"></i> <span th:text="${routeGrowth} ?: '12%'">12%</span> from last month
                 </p>
             </div>
 
@@ -65,14 +65,14 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-600 text-sm font-semibold">Active Vehicles</p>
-                        <p class="text-4xl font-bold text-gray-900 mt-2">48</p>
+                        <p class="text-4xl font-bold text-gray-900 mt-2" th:text="${activeVehicles} ?: '0'">48</p>
                     </div>
                     <div class="bg-green-100 rounded-lg p-4">
                         <i class="fas fa-car text-green-600 text-2xl"></i>
                     </div>
                 </div>
                 <p class="text-green-600 text-sm mt-4">
-                    <i class="fas fa-arrow-up"></i> 8% from last week
+                    <i class="fas fa-arrow-up"></i> <span th:text="${vehicleGrowth} ?: '8%'">8%</span> from last week
                 </p>
             </div>
 
@@ -81,14 +81,14 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-600 text-sm font-semibold">Total Distance</p>
-                        <p class="text-4xl font-bold text-gray-900 mt-2">3,420 km</p>
+                        <p class="text-4xl font-bold text-gray-900 mt-2" th:text="${totalDistance} ?: '0 km'">3,420 km</p>
                     </div>
                     <div class="bg-purple-100 rounded-lg p-4">
                         <i class="fas fa-globe text-purple-600 text-2xl"></i>
                     </div>
                 </div>
                 <p class="text-green-600 text-sm mt-4">
-                    <i class="fas fa-arrow-up"></i> 5% increase
+                    <i class="fas fa-arrow-up"></i> <span th:text="${distanceGrowth} ?: '5%'">5%</span> increase
                 </p>
             </div>
 
@@ -97,7 +97,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-600 text-sm font-semibold">Completion Rate</p>
-                        <p class="text-4xl font-bold text-gray-900 mt-2">98%</p>
+                        <p class="text-4xl font-bold text-gray-900 mt-2" th:text="${completionRate} ?: '98%'">98%</p>
                     </div>
                     <div class="bg-orange-100 rounded-lg p-4">
                         <i class="fas fa-chart-pie text-orange-600 text-2xl"></i>

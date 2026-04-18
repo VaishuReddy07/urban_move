@@ -49,25 +49,25 @@
                     <div class="w-24 h-24 bg-blue-600 rounded-full mx-auto flex items-center justify-center text-white text-3xl mb-4">
                         <i class="fas fa-user"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-900">John Doe</h2>
-                    <p class="text-gray-600 mt-2">john@example.com</p>
+                    <h2 class="text-2xl font-bold text-gray-900" th:text="${user.fullName} ?: 'User'">John Doe</h2>
+                    <p class="text-gray-600 mt-2" th:text="${user.email}">john@example.com</p>
                     <div class="mt-4">
                         <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
-                            <i class="fas fa-crown mr-1"></i>Premium Member
+                            <i class="fas fa-crown mr-1"></i><span th:text="${membershipType} ?: 'USER'">Premium Member</span>
                         </span>
                     </div>
                     <div class="mt-6 space-y-2 text-left">
-                        <div class="flex items-center text-gray-700">
+                        <div class="flex items-center text-gray-700" th:if="${user.phoneNumber}">
                             <i class="fas fa-phone mr-3 text-blue-600"></i>
-                            <span>+1 (555) 123-4567</span>
+                            <span th:text="${user.phoneNumber}">+1 (555) 123-4567</span>
                         </div>
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-location-dot mr-3 text-blue-600"></i>
-                            <span>San Francisco, CA</span>
+                        <div class="flex items-center text-gray-700" th:if="${user.email}">
+                            <i class="fas fa-envelope mr-3 text-blue-600"></i>
+                            <span th:text="${user.email}">user@example.com</span>
                         </div>
-                        <div class="flex items-center text-gray-700">
+                        <div class="flex items-center text-gray-700" th:if="${createdAt}">
                             <i class="fas fa-calendar mr-3 text-blue-600"></i>
-                            <span>Joined March 2024</span>
+                            <span th:text="'Joined ' + ${#dates.format(createdAt, 'MMMM yyyy')}">Joined March 2024</span>
                         </div>
                     </div>
                 </div>
@@ -78,15 +78,15 @@
                     <div class="space-y-3">
                         <div class="flex justify-between">
                             <span class="text-gray-600">Total Trips</span>
-                            <span class="font-semibold text-gray-900">247</span>
+                            <span class="font-semibold text-gray-900" th:text="${totalTrips} ?: '0'">247</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Total Distance</span>
-                            <span class="font-semibold text-gray-900">12,450 km</span>
+                            <span class="font-semibold text-gray-900" th:text="${totalDistance} ?: '0 km'">12,450 km</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Account Age</span>
-                            <span class="font-semibold text-gray-900">1 Year 3 Months</span>
+                            <span class="font-semibold text-gray-900" th:text="${accountAge} ?: 'New Account'">1 Year 3 Months</span>
                         </div>
                     </div>
                 </div>
@@ -105,21 +105,21 @@
                     <form id="profileForm" class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
-                                <input type="text" value="John" disabled class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" id="firstName">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                                <input type="text" th:value="${user.fullName} ?: ''" disabled class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" id="fullName">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
-                                <input type="text" value="Doe" disabled class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" id="lastName">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+                                <input type="text" th:value="${user.username} ?: ''" disabled class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" id="username">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
-                            <input type="email" value="john@example.com" disabled class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" id="email">
+                            <input type="email" th:value="${user.email} ?: ''" disabled class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" id="email">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
-                            <input type="tel" value="+1 (555) 123-4567" disabled class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" id="phone">
+                            <input type="tel" th:value="${user.phoneNumber} ?: ''" disabled class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" id="phone">
                         </div>
                         <div id="editActions" class="hidden mt-6 flex space-x-4">
                             <button type="button" onclick="cancelEdit()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-200">Cancel</button>
@@ -155,7 +155,8 @@
                         <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                             <div>
                                 <p class="font-semibold text-gray-900">Password</p>
-                                <p class="text-sm text-gray-600">Last changed 3 months ago</p>
+                                <p class="text-sm text-gray-600" th:if="${user}">Last updated with your account</p>
+                                <p class="text-sm text-gray-600" th:unless="${user}">Status unavailable</p>
                             </div>
                             <button class="text-blue-600 hover:text-blue-700">Change</button>
                         </div>
