@@ -45,9 +45,7 @@
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900">Route Management</h1>
                     <p class="text-gray-600 mt-2">Manage and optimize your delivery routes</p>
-                    <!-- End of routes content -->
-                </body>
-                </html>
+                </div>
                 <a href="/routes/add" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">
                     <i class="fas fa-plus mr-2"></i>Add New Route
                 </a>
@@ -156,109 +154,5 @@
             </div>
         </div>
     </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                    <select id="statusFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
-                        <option value="">All Statuses</option>
-                        <option value="PLANNED">Planned</option>
-                        <option value="IN_PROGRESS">In Progress</option>
-                        <option value="COMPLETED">Completed</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Search</label>
-                    <input type="text" id="searchInput" placeholder="Search routes..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
-                </div>
-                <div class="flex items-end">
-                    <button onclick="filterRoutes()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
-                        <i class="fas fa-search mr-2"></i>Search
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Routes Table -->
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <table class="w-full">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Route Name</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Start Location</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">End Location</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Distance</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="routesTableBody" class="divide-y divide-gray-200">
-                    <!-- Routes will be loaded here -->
-                    <tr>
-                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-                            <i class="fas fa-inbox text-4xl mb-4"></i>
-                            <p>No routes available</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Create Route Modal -->
-    <div id="createRouteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Create New Route</h2>
-            <form id="createRouteForm" onsubmit="submitCreateRoute(event)">
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Route Name</label>
-                    <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Start Location</label>
-                    <input type="text" name="startLocation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">End Location</label>
-                    <input type="text" name="endLocation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Estimated Distance (km)</label>
-                    <input type="number" name="estimatedDistance" step="0.1" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
-                </div>
-                <div class="flex justify-end space-x-4">
-                    <button type="button" onclick="closeCreateRouteModal()" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-200">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">Create</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        function openCreateRouteModal() {
-            document.getElementById('createRouteModal').classList.remove('hidden');
-        }
-
-        function closeCreateRouteModal() {
-            document.getElementById('createRouteModal').classList.add('hidden');
-            document.getElementById('createRouteForm').reset();
-        }
-
-        function submitCreateRoute(event) {
-            event.preventDefault();
-            // API call to create route
-            alert('Route creation would be submitted here');
-            closeCreateRouteModal();
-        }
-
-        function filterRoutes() {
-            // Filter implementation
-            console.log('Filtering routes...');
-        }
-
-        // Load routes on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load routes from API
-        });
-    </script>
 </body>
 </html>
