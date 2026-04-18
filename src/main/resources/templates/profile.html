@@ -67,7 +67,7 @@
                         </div>
                         <div class="flex items-center text-gray-700" th:if="${createdAt}">
                             <i class="fas fa-calendar mr-3 text-blue-600"></i>
-                            <span th:text="'Joined ' + ${#dates.format(createdAt, 'MMMM yyyy')}">Joined March 2024</span>
+                            <span th:text="${'Joined ' + #dates.format(createdAt, 'MMMM yyyy')}">Joined March 2024</span>
                         </div>
                     </div>
                 </div>
