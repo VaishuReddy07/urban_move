@@ -3484,3 +3484,10 @@ Caused by: java.net.UnknownHostException: mysql.railway.internal
 2026-04-18T03:52:41.485+02:00  INFO 2712 --- [UrbanMove] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-04-18T03:52:41.488+02:00  INFO 2712 --- [UrbanMove] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-04-18T03:52:41.503+02:00  INFO 2712 --- [UrbanMove] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-04-18T08:09:43.957+02:00  WARN 21176 --- [UrbanMove] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3h7m29s103ms65µs100ns).
+2026-04-18T09:41:17.248+02:00  WARN 21176 --- [UrbanMove] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h31m43s738ms937µs100ns).
+2026-04-18T10:58:26.708+02:00  INFO 21176 --- [UrbanMove] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-18T10:58:26.738+02:00  INFO 21176 --- [UrbanMove] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-18T10:58:26.794+02:00  INFO 21176 --- [UrbanMove] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-18T10:58:26.825+02:00  INFO 21176 --- [UrbanMove] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-04-18T10:58:26.839+02:00  INFO 21176 --- [UrbanMove] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

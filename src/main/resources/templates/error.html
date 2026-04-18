@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${status} ? 'Error ' + ${status} : 'Error'">Error</title>
+    <link th:href="@{/css/custom.css}" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .error-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 50px;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .error-code {
+            font-size: 72px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .error-title {
+            font-size: 24px;
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+        
+        .error-message {
+            font-size: 16px;
+            color: #666;
+            margin: 15px 0 30px 0;
+            line-height: 1.6;
+        }
+        
+        .error-details {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 4px;
+        }
+        
+        .error-details p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+            word-break: break-all;
+        }
+        
+        .error-details strong {
+            color: #333;
+        }
+        
+        .error-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+        
+        .error-timestamp {
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code" th:text="${status} ?: '500'">500</h1>
+        <h2 class="error-title" th:text="${error} ?: 'Error'">Error</h2>
+        <p class="error-message" th:text="${message} ?: 'An error occurred while processing your request.'">An error occurred while processing your request.</p>
+        
+        <div class="error-details" th:if="${status} or ${path}">
+            <p th:if="${status}"><strong>Status Code:</strong> <span th:text="${status}">500</span></p>
+            <p th:if="${path}"><strong>Request Path:</strong> <span th:text="${path}">N/A</span></p>
+        </div>
+        
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">Go to Home</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+        </div>
+        
+        <div class="error-timestamp">
+            If this problem persists, please contact support.
+        </div>
+    </div>
+</body>
+</html>
