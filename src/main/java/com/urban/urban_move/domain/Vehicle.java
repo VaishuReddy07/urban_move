@@ -76,9 +76,10 @@ public class Vehicle extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fleet_id")
     private Fleet fleet;
-    
+
     @Column(nullable = false)
-    private Long lastLocationUpdateTime;
+    @lombok.Builder.Default
+    private Long lastLocationUpdateTime = System.currentTimeMillis();
     
     public enum VehicleStatus {
         IDLE, IN_SERVICE, CHARGING, MAINTENANCE, ACTIVE, OFFLINE
